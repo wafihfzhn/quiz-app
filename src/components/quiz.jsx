@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function Quiz() {
   const questionBanks = [
     {
@@ -22,16 +24,49 @@ function Quiz() {
     },
   ]
 
+  const [ userAnswers, setUserAnswers ] = useState([ null, null, null ]);
+  const [ currentNumQuestion, setCurrentNumQuestion ] = useState(0);
+
+  const currentQuestion = questionBanks[currentNumQuestion];
+
+  function handleSelectOption(option) {
+    const newUserAnswers = [ ...userAnswers ];
+    newUserAnswers[currentNumQuestion] = option;
+
+    setUserAnswers(newUserAnswers);
+  }
+
+  function prevQuestion() {
+    setCurrentNumQuestion(currentNumQuestion - 1)
+  }
+
+  function nextQuestion() {
+    setCurrentNumQuestion(currentNumQuestion + 1)
+  }
+
   return (
     <div>
-      <h2>Question 1</h2>
-      <p className="question">{questionBanks[0].question}</p>
+      <h3>Question {currentNumQuestion + 1}</h3>
+      <p className="question">{currentQuestion.question}</p>
 
       {
-        questionBanks[0].options.map((option) => (
-          <button className="option"> {option} </button>
-        ))
+        currentQuestion.options.map(option =>
+          <button
+            className={"option" + (userAnswers[currentNumQuestion] === option ? " selected" : "")}
+            onClick={() => handleSelectOption(option)}
+          >
+            {option}
+          </button>
+        )
       }
+
+
+      <div className="nav-buttons">
+        <button onClick={prevQuestion} disabled={currentNumQuestion === 0}> Previous </button>
+        <button onClick={nextQuestion} disabled={!userAnswers[currentNumQuestion]}>
+          {currentNumQuestion === (questionBanks.length - 1) ? "Finish Quiz" : "Next"}
+        </button>
+      </div>
     </div>
   );
 }
