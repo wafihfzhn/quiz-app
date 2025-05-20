@@ -26,6 +26,12 @@ function Quiz() {
     <div>
       <h2>Question 1</h2>
       <p className="question">{questionBanks[0].question}</p>
+
+      {
+        questionBanks[0].options.map((option) => (
+          <button className="option"> {option} </button>
+        ))
+      }
     </div>
   );
 }
