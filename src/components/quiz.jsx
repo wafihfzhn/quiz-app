@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Result from "./result";
 
 function Quiz() {
   const questionBanks = [
@@ -49,17 +50,15 @@ function Quiz() {
       <h3>Question {currentNumQuestion + 1}</h3>
       <p className="question">{currentQuestion.question}</p>
 
-      {
-        currentQuestion.options.map(option =>
-          <button
-            className={"option" + (userAnswers[currentNumQuestion] === option ? " selected" : "")}
-            onClick={() => handleSelectOption(option)}
-          >
-            {option}
-          </button>
-        )
-      }
-
+      {currentQuestion.options.map((option, index) =>
+        <button
+          className={"option" + (userAnswers[currentNumQuestion] === option ? " selected" : "")}
+          onClick={() => handleSelectOption(option)}
+          key={index}
+        >
+          {option}
+        </button>
+      )}
 
       <div className="nav-buttons">
         <button onClick={prevQuestion} disabled={currentNumQuestion === 0}> Previous </button>
@@ -67,6 +66,8 @@ function Quiz() {
           {currentNumQuestion === (questionBanks.length - 1) ? "Finish Quiz" : "Next"}
         </button>
       </div>
+
+      <Result />
     </div>
   );
 }
