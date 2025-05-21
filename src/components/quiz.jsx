@@ -29,6 +29,7 @@ function Quiz() {
   const [ currentNumQuestion, setCurrentNumQuestion ] = useState(0);
 
   const currentQuestion = questionBanks[currentNumQuestion];
+  const isQuizFinished = currentNumQuestion === questionBanks.length
 
   function handleSelectOption(option) {
     const newUserAnswers = [ ...userAnswers ];
@@ -45,31 +46,33 @@ function Quiz() {
     setCurrentNumQuestion(currentNumQuestion + 1)
   }
 
-  return (
-    <div>
-      <h3>Question {currentNumQuestion + 1}</h3>
-      <p className="question">{currentQuestion.question}</p>
+  if (isQuizFinished ) {
+    return <Result />
+  } else {
+    return (
+      <div>
+        <h3>Question {currentNumQuestion + 1}</h3>
+        <p className="question">{currentQuestion.question}</p>
 
-      {currentQuestion.options.map((option, index) =>
-        <button
-          className={"option" + (userAnswers[currentNumQuestion] === option ? " selected" : "")}
-          onClick={() => handleSelectOption(option)}
-          key={index}
-        >
-          {option}
-        </button>
-      )}
+        {currentQuestion.options.map((option, index) =>
+          <button
+            className={"option" + (userAnswers[currentNumQuestion] === option ? " selected" : "")}
+            onClick={() => handleSelectOption(option)}
+            key={index}
+          >
+            {option}
+          </button>
+        )}
 
-      <div className="nav-buttons">
-        <button onClick={prevQuestion} disabled={currentNumQuestion === 0}> Previous </button>
-        <button onClick={nextQuestion} disabled={!userAnswers[currentNumQuestion]}>
-          {currentNumQuestion === (questionBanks.length - 1) ? "Finish Quiz" : "Next"}
-        </button>
+        <div className="nav-buttons">
+          <button onClick={prevQuestion} disabled={currentNumQuestion === 0}> Previous </button>
+          <button onClick={nextQuestion} disabled={!userAnswers[currentNumQuestion]}>
+            {currentNumQuestion === (questionBanks.length - 1) ? "Finish Quiz" : "Next"}
+          </button>
+        </div>
       </div>
-
-      <Result />
-    </div>
-  );
+    );
+  }
 }
 
 export default Quiz;
